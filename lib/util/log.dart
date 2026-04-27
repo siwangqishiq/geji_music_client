@@ -5,14 +5,14 @@ class Log{
   static Logger logger = Logger();
 
   static void i(String tag, String msg){
-    logger.i("$tag $msg");
+    logger.i("$tag $msg", stackTrace: StackTrace.empty);
   }
 
   static void w(String tag, String msg){
-    logger.w("$tag $msg");
+    logger.w("$tag $msg", stackTrace: StackTrace.empty);
   }
 
   static void e(String tag, String msg){
-    logger.e("$tag $msg");
+    logger.e("$tag $msg", stackTrace: StackTrace.empty);
   }
 }
