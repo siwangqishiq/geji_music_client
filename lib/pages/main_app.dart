@@ -11,14 +11,14 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ToastificationWrapper(
-      child: MaterialApp(
+      child:MaterialApp(
         title: AppName,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         ),
         routes: RounterMap(),
         initialRoute: ROUTER_SEARCH,
-      )
+      ) 
     );
   }
 }

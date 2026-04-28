@@ -7,6 +7,8 @@ class Resp<T> {
 
   Resp({this.code,this.msg,this.data});
 
+  bool isSuccess() => code == 200;
+
   static Resp fail(int code, String msg) {
     return Resp(code:code, msg :msg);
   }

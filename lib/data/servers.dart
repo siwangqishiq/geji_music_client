@@ -1,6 +1,15 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, constant_identifier_names
 
-const String BASE_URL_TEST = "http://127.0.0.1:4488";
+import 'package:geji_music_client/config.dart';
+
+const String BASE_URL_TEST = "http://172.16.1.46:4488";
 
 const String BASE_URL = "http://101.126.34.145:4488";
+
+String GetBaseUrl(){
+  if(IsDebug){
+    return BASE_URL_TEST;
+  }
+  return BASE_URL;
+}
 
