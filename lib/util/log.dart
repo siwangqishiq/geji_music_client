@@ -1,8 +1,12 @@
 import 'package:logger/logger.dart';
 
 class Log{
-
-  static Logger logger = Logger();
+  static final logger = Logger(
+     printer: PrettyPrinter(
+      dateTimeFormat: DateTimeFormat.dateAndTime
+    )
+  );
+  
 
   static void i(String tag, String msg){
     logger.i("$tag $msg", stackTrace: StackTrace.empty);

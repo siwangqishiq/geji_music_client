@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:geji_music_client/pages/search_page.dart';
+import 'package:geji_music_client/pages/main_app.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MainApp());
 }
 

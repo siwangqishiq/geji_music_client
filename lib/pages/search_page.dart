@@ -1,59 +1,138 @@
+// ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:geji_music_client/config.dart';
-import 'package:geji_music_client/data/pkg.dart';
+import 'package:geji_music_client/common/com_color.dart';
+import 'package:geji_music_client/common/eventbus/bus_msg.dart';
+import 'package:geji_music_client/common/eventbus/event_bus.dart';
 import 'package:geji_music_client/util/log.dart';
+import 'package:geji_music_client/util/text_util.dart';
+import 'package:geji_music_client/util/toast_util.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
+  
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppName,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-      ),
-      home: const MyHomePage(title: AppName),
-    );
-  }
+  State<StatefulWidget> createState() => _SearchPageState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class _SearchPageState extends State<SearchPage> with IEvent {
+  static String Tag = "SearchPage";
 
-  final String title;
+  final _inputController = TextEditingController();
+  bool _isLoading = false;
+  bool _searchButtonEnable = false;
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    // var s = Resp.success("xxxxx");
-    // var ss = s.data as String;
-    // Log.i("test","ss $ss");
+    EventBus.instance().register(this);
+  }
+
+  @override
+  void dispose(){
+    EventBus.instance().unRegister(this);
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
+      backgroundColor:ComColors.MainBackground,
+      body: Padding(
+        padding: EdgeInsetsGeometry.all(16),
         child: Column(
-          mainAxisAlignment: .center,
           children: [
-            const Text(AppName),
+            buildSearchBarWidget(),
+            SizedBox(height: 8),
+            Expanded(
+              child: ListView()
+            )          
           ],
         ),
       ),
     );
   }
-}
+
+  void _searchButtonClick(){
+    Log.i(Tag, "click search button.");
+    ToastUtil.show("开始搜索${_inputController.text}");
+
+    setState(() {
+      _isLoading = true;
+    });
+  }
+
+  Widget buildSearchBarWidget(){
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.shade100, // 搜索框背景色
+          borderRadius: BorderRadius.circular(20), // 圆角
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            )
+          ]
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        child: Row(
+          children: [
+            Icon(Icons.search, color: Colors.grey),
+            SizedBox(width: 8),
+            Expanded(
+              child: TextField(
+                controller: _inputController,
+                onChanged: (value) {
+                  setState(() {
+                    _searchButtonEnable = TextUtil.isNotEmpty(value);
+                  });
+                },
+                decoration: InputDecoration(
+                  hintText: "搜索歌曲或歌手",
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            SizedBox(width: 8),
+            AnimatedSwitcher(
+              duration: Duration(milliseconds: 320),
+              child: _isLoading
+                  ? SizedBox(
+                      key: ValueKey("loading"),
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : GestureDetector(
+                      key: ValueKey("button"),
+                      onTap: _searchButtonClick,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: _searchButtonEnable?Colors.blue:Colors.blueGrey,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text(
+                          "搜索",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  
+  @override
+  bool onEvent(EventMessage msg) {
+    return false;
+  }
+}//end class
 
 
