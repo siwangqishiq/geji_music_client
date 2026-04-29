@@ -5,6 +5,9 @@ import 'package:geji_music_client/common/com_color.dart';
 import 'package:geji_music_client/common/eventbus/bus_msg.dart';
 import 'package:geji_music_client/common/eventbus/event_bus.dart';
 import 'package:geji_music_client/common/http_client.dart';
+import 'package:geji_music_client/common/widget/responsive_container.dart';
+import 'package:geji_music_client/data/pkg.dart';
+import 'package:geji_music_client/model/song.dart';
 import 'package:geji_music_client/util/log.dart';
 import 'package:geji_music_client/util/text_util.dart';
 import 'package:geji_music_client/util/toast_util.dart';
@@ -22,7 +25,8 @@ class _SearchPageState extends State<SearchPage> with IEvent {
   final _inputController = TextEditingController();
   bool _isLoading = false;
   bool _searchButtonEnable = false;
-  String? respContent;
+
+  List<SongQuery> _resultList = [];
 
   @override
   void initState() {
@@ -48,13 +52,85 @@ class _SearchPageState extends State<SearchPage> with IEvent {
               buildSearchBarWidget(),
               SizedBox(height: 8),
               Expanded(
-                child: Text(respContent??"")
+                child: ResponsiveContainer(
+                  maxWidth: 600,
+                  child: ListView.builder(
+                    itemCount: _resultList.length,
+                    itemBuilder: (ctx,index) => buildQueryResultItem(ctx,index)
+                  )
+                )
               )
             ],
           ),
         ),
       )
     );
+  }
+
+  Widget buildQueryResultItem(BuildContext ctx, int index){
+    var itemData = _resultList[index];
+    return Padding(
+      padding: EdgeInsetsGeometry.all(8),
+      child: Card(
+        elevation: 12, // 阴影强度
+        shadowColor: Colors.black.withValues(alpha: 0.3),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: InkWell(
+          onTap: () {
+            Log.i(Tag, "click item ${itemData.mid} ${itemData.name} ${itemData.author}");
+          },
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                        child: Text(
+                          itemData.name??"*" , 
+                          style: TextStyle(color: Colors.black,fontSize: 20, fontWeight: FontWeight.bold)
+                      ) 
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      itemData.author??"未知歌手",
+                      style: TextStyle(color: Colors.grey,fontSize: 14, fontStyle: FontStyle.normal)
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+        )
+      )
+    );
+
+    // return Container(
+    //   margin: EdgeInsets.all(16),
+    //   decoration: BoxDecoration(
+    //     color: Colors.white,
+    //     borderRadius: BorderRadius.circular(20),
+    //     boxShadow: [
+    //       BoxShadow(
+    //         color: Colors.grey.withValues(alpha: 0.2),
+    //         blurRadius: 25,
+    //         spreadRadius: 2,
+    //         offset: Offset(0, 8),
+    //       ),
+    //     ],
+    //   ),
+    //   child: Padding(
+    //     padding: EdgeInsets.all(20),
+    //     child: Text("iOS 风格卡片"),
+    //   ),
+    // );
   }
 
   void _searchButtonClick() async {
@@ -67,24 +143,35 @@ class _SearchPageState extends State<SearchPage> with IEvent {
 
     setState(() {
       _isLoading = true;
+      _resultList.clear();
     });
 
     try{
-      var resp = await HttpClient().get<String>("/api/search",params: {
-        "query":queryContent
-      });
-      Log.i(Tag, "resp ${resp.statusCode} ${resp.data}");
-      respContent = resp.data;
+      var resp = await HttpClient().get<List<SongQuery>?>("/api/search",
+        params: {
+          "query":queryContent
+        },
+        parser: (json)=>(json as List).map((e) => SongQuery.fromJson(e)).toList()
+      );
+      Log.i(Tag, "resp ${resp.code}");
+      if(resp.isSuccess()){
+        var list = resp.data;
+        Log.w(Tag, "Get query result : ${list?.length??0}");
+        _resultList.addAll(list??[]);
+      }else{
+        ToastUtil.showAsError(resp.msg??"请求错误");
+      }
     }catch(e, stackTrace) {
       Log.e(Tag, "Error request $e");
       Log.e(Tag, "Error stackTrace $stackTrace");
-      ToastUtil.show("请求错误");
+      ToastUtil.showAsError("请求错误");
     }
 
     setState(() {
       _isLoading = false;
     });
   }
+
 
   Widget buildSearchBarWidget(){
     return Padding(

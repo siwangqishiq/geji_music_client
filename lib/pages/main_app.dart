@@ -1,5 +1,7 @@
 
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:geji_music_client/config.dart';
 import 'package:geji_music_client/pages/routers.dart';
@@ -13,6 +15,7 @@ class MainApp extends StatelessWidget {
     return ToastificationWrapper(
       child:MaterialApp(
         title: AppName,
+        scrollBehavior: AllScrollBehavior(),
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         ),
@@ -21,6 +24,15 @@ class MainApp extends StatelessWidget {
       ) 
     );
   }
+}
+
+class AllScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
+      };
 }
 
 

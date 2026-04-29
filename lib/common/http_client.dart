@@ -1,7 +1,10 @@
 
 
 import 'package:dio/dio.dart';
+import 'package:geji_music_client/data/pkg.dart';
 import 'package:geji_music_client/data/servers.dart';
+
+typedef JsonParser<T> = T Function(dynamic json);
 
 class HttpClient {
   static final HttpClient _instance = HttpClient._internal();
@@ -60,55 +63,85 @@ class HttpClient {
     );
   }
 
-  Future<Response<T>> get<T>(
-    String path, {
-    Map<String, dynamic>? params,
-    Options? options,
-  }) {
-    return _dio.get<T>(
-      path,
-      queryParameters: params,
-      options: options,
-    );
-  }
-
-  Future<Response<T>> post<T>(
-    String path, {
+  Future<Resp<T>> post<T>(String path, {
     dynamic data,
     Map<String, dynamic>? params,
-    Options? options,
-  }) {
-    return _dio.post<T>(
-      path,
+    Options? options, 
+    JsonParser<T>? parser}) async{
+    
+    final response = await _dio.post(path,
       data: data,
       queryParameters: params,
       options: options,
     );
+
+    return _parseResponse<T>(response.statusCode??-1,response.data, parser);
   }
 
-  Future<Response<T>> put<T>(
-    String path, {
-    dynamic data,
+
+  Future<Resp<T>> get<T>(String path, {
     Map<String, dynamic>? params,
-  }) {
-    return _dio.put<T>(
-      path,
-      data: data,
+    Options? options, 
+    JsonParser<T>? parser}) async{
+    
+    final response = await _dio.get(path,
       queryParameters: params,
+      options: options,
     );
+
+    return _parseResponse<T>(response.statusCode??-1,response.data, parser);
   }
 
-  Future<Response<T>> delete<T>(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? params,
-  }) {
-    return _dio.delete<T>(
-      path,
-      data: data,
-      queryParameters: params,
+  Resp<T> _parseResponse<T>(int httpCode,dynamic json,JsonParser<T>? parser) {
+    if(httpCode != 200){
+      return Resp<T>(
+        code: httpCode,
+        msg: null,
+        data: null,
+      );
+    }
+
+    final resp = Resp<T?>(
+      code: json["code"],
+      msg: json["msg"],
+      data: null,
     );
+
+
+    if (resp.code == 200) {
+      if (parser != null && json["data"] != null) {
+        resp.data = parser(json["data"]);
+      } else {
+        resp.data = json["data"]; // 基础类型
+      }
+    }
+
+    return resp as Resp<T>;
   }
+
+  // Future<Response<T>> put<T>(
+  //   String path, {
+  //   dynamic data,
+  //   Map<String, dynamic>? params,
+  // }) {
+  //   return _dio.put<T>(
+  //     path,
+  //     data: data,
+  //     queryParameters: params,
+  //   );
+  // }
+
+  // Future<Response<T>> delete<T>(
+  //   String path, {
+  //   dynamic data,
+  //   Map<String, dynamic>? params,
+  // }) {
+  //   return _dio.delete<T>(
+  //     path,
+  //     data: data,
+  //     queryParameters: params,
+  //   );
+  // }
 
   Future<String?> _getToken() async {
     return null;
