@@ -6,8 +6,8 @@ import 'package:geji_music_client/common/eventbus/bus_msg.dart';
 import 'package:geji_music_client/common/eventbus/event_bus.dart';
 import 'package:geji_music_client/common/http_client.dart';
 import 'package:geji_music_client/common/widget/responsive_container.dart';
-import 'package:geji_music_client/data/pkg.dart';
 import 'package:geji_music_client/model/song.dart';
+import 'package:geji_music_client/pages/routers.dart';
 import 'package:geji_music_client/util/log.dart';
 import 'package:geji_music_client/util/text_util.dart';
 import 'package:geji_music_client/util/toast_util.dart';
@@ -26,7 +26,7 @@ class _SearchPageState extends State<SearchPage> with IEvent {
   bool _isLoading = false;
   bool _searchButtonEnable = false;
 
-  List<SongQuery> _resultList = [];
+  final List<SongQuery> _resultList = [];
 
   @override
   void initState() {
@@ -80,6 +80,10 @@ class _SearchPageState extends State<SearchPage> with IEvent {
         child: InkWell(
           onTap: () {
             Log.i(Tag, "click item ${itemData.mid} ${itemData.name} ${itemData.author}");
+            var params = <String,dynamic>{
+              "mid":itemData.mid
+            };
+            Navigator.of(ctx).pushNamed(ROUTER_MUSIC_DETAIL, arguments: params);
           },
           child: Padding(
             padding: EdgeInsets.all(16),
@@ -111,26 +115,6 @@ class _SearchPageState extends State<SearchPage> with IEvent {
         )
       )
     );
-
-    // return Container(
-    //   margin: EdgeInsets.all(16),
-    //   decoration: BoxDecoration(
-    //     color: Colors.white,
-    //     borderRadius: BorderRadius.circular(20),
-    //     boxShadow: [
-    //       BoxShadow(
-    //         color: Colors.grey.withValues(alpha: 0.2),
-    //         blurRadius: 25,
-    //         spreadRadius: 2,
-    //         offset: Offset(0, 8),
-    //       ),
-    //     ],
-    //   ),
-    //   child: Padding(
-    //     padding: EdgeInsets.all(20),
-    //     child: Text("iOS 风格卡片"),
-    //   ),
-    // );
   }
 
   void _searchButtonClick() async {
