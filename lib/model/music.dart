@@ -12,19 +12,17 @@ class Music {
     this.author,
     this.playUrl,
     this.cover,
-    this.durationSecs = 0
+    this.durationSecs = 0,
   });
 
-  factory Music.fromJson(Map<String, dynamic> json){
+  factory Music.fromJson(Map<String, dynamic> json) {
     return Music(
-      mid:json["mid"],
-      name:json["name"],
-      author:json["author"],
-      playUrl: json["playUrl"],
-      cover:json["cover"],
-      durationSecs:json["durationSecs"]
+      mid: json["mid"],
+      name: json["name"],
+      author: json["author"],
+      playUrl: json["musicUrl"],
+      cover: json["cover"],
+      durationSecs: json["durationSecs"],
     );
   }
 }
-
-
