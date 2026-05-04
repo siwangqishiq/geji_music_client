@@ -1,6 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
-import 'package:geji_music_client/common/web_auido_player.dart';
+// import 'package:geji_music_client/common/web_auido_player.dart';
 
 class Player {
   static final Player _instance = Player._internal();
@@ -14,7 +14,7 @@ class Player {
 
   void playUrl(String url) async {
     if (kIsWeb) {
-      WebAudioPlayer().play(url);
+      // WebAudioPlayer().play(url);
     } else {
       if (_audioPlayer.state == PlayerState.playing) {
         _audioPlayer.stop();
