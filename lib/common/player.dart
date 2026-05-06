@@ -1,5 +1,3 @@
-import 'dart:js_interop' as WebCrossOrigin;
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geji_music_client/common/floatwin/floating_manager.dart';
