@@ -1,3 +1,5 @@
+import 'dart:js_interop' as WebCrossOrigin;
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geji_music_client/common/floatwin/floating_manager.dart';
@@ -37,16 +39,12 @@ class Player {
   }
 
   void playUrl(String url) async {
-    if (kIsWeb) {
-      // WebAudioPlayer().play(url);
-    } else {
-      if (_audioPlayer.state == PlayerState.playing) {
-        _audioPlayer.stop();
-      }
-
-      _addPlayListener();
-      await _audioPlayer.play(UrlSource(url));
+    if (_audioPlayer.state == PlayerState.playing) {
+      _audioPlayer.stop();
     }
+
+    _addPlayListener();
+    await _audioPlayer.play(UrlSource(url));
   }
 
   void _addPlayListener(){

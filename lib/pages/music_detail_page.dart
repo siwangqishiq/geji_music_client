@@ -65,7 +65,7 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
     if (music == null) {
       return;
     }
-    
+
     Player().playMusic(music);
   }
 
@@ -99,7 +99,7 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
             margin: EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withValues(alpha: 0.2),
