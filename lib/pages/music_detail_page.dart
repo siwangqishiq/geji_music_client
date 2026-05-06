@@ -2,9 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:geji_music_client/common/com_color.dart';
+import 'package:geji_music_client/common/floatwin/floating_manager.dart';
+import 'package:geji_music_client/common/floatwin/player_state.dart';
 import 'package:geji_music_client/common/http_client.dart';
 import 'package:geji_music_client/common/player.dart';
 import 'package:geji_music_client/model/music.dart';
+import 'package:geji_music_client/pages/main_app.dart';
 import 'package:geji_music_client/util/log.dart';
 import 'package:geji_music_client/util/time_util.dart';
 import 'package:geji_music_client/util/toast_util.dart';
@@ -62,8 +65,8 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
     if (music == null) {
       return;
     }
-
-    Player().playUrl(music.playUrl ?? "");
+    
+    Player().playMusic(music);
   }
 
   @override
@@ -113,6 +116,9 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
                 width: 180,
                 height: 180,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return _buildFallbackCover();
+                },
               ),
             ),
           ),
@@ -166,6 +172,7 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
               ElevatedButton(
                 onPressed: () {
                   ToastUtil.showAsError("请先登录");
+                  // FloatingManager().toggle();
                 },
                 style: ElevatedButton.styleFrom(
                   shape: const StadiumBorder(),
@@ -178,6 +185,30 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildFallbackCover(){
+    return Container(
+      width: 180,
+      height: 180,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.grey.shade300,
+            Colors.grey.shade100,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Center(
+        child: Icon(
+          Icons.music_note,
+          size: 48,
+          color: Colors.grey.shade500,
+        ),
       ),
     );
   }
