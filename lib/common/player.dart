@@ -1,11 +1,9 @@
-import 'dart:js_interop' as WebCrossOrigin;
-
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/foundation.dart';
 import 'package:geji_music_client/common/floatwin/floating_manager.dart';
 import 'package:geji_music_client/common/floatwin/player_state.dart';
 import 'package:geji_music_client/model/music.dart';
 import 'package:geji_music_client/util/log.dart';
+import 'package:geji_music_client/util/toast_util.dart';
 // import 'package:geji_music_client/common/web_auido_player.dart';
 
 class Player {
@@ -44,7 +42,12 @@ class Player {
     }
 
     _addPlayListener();
-    await _audioPlayer.play(UrlSource(url));
+    try{
+      await _audioPlayer.play(UrlSource(url));
+    }catch(e){
+      Log.e("player", "play error ${e.toString()}");
+      ToastUtil.showAsError("播放异常");
+    }
   }
 
   void _addPlayListener(){
@@ -59,6 +62,8 @@ class Player {
         // FloatWinPlayerState.instance.isPlaying = false;
       }
     });
+    
+
   }
 
   void switchToNextMusic(){

@@ -9,14 +9,14 @@ class Log{
   
 
   static void i(String tag, String msg){
-    logger.i("$tag $msg", stackTrace: StackTrace.empty);
+    logger.i("$tag:$msg", stackTrace: StackTrace.empty);
   }
 
   static void w(String tag, String msg){
-    logger.w("$tag $msg", stackTrace: StackTrace.empty);
+    logger.w("$tag:$msg", stackTrace: StackTrace.empty);
   }
 
   static void e(String tag, String msg){
-    logger.e("$tag $msg", stackTrace: StackTrace.empty);
+    logger.e("$tag:$msg", stackTrace: StackTrace.empty);
   }
 }
