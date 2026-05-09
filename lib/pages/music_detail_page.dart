@@ -2,12 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:geji_music_client/common/com_color.dart';
-import 'package:geji_music_client/common/floatwin/floating_manager.dart';
-import 'package:geji_music_client/common/floatwin/player_state.dart';
 import 'package:geji_music_client/common/http_client.dart';
 import 'package:geji_music_client/common/player.dart';
 import 'package:geji_music_client/model/music.dart';
-import 'package:geji_music_client/pages/main_app.dart';
 import 'package:geji_music_client/util/log.dart';
 import 'package:geji_music_client/util/time_util.dart';
 import 'package:geji_music_client/util/toast_util.dart';
@@ -75,7 +72,7 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
       backgroundColor: ComColors.MainBackground,
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        elevation: 4,
+        elevation: 8,
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),

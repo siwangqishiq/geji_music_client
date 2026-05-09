@@ -48,6 +48,11 @@ class _SearchPageState extends State<SearchPage> with IEvent {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:ComColors.MainBackground,
+      appBar:AppBar(
+        elevation: 8,
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsetsGeometry.all(16),
@@ -60,7 +65,7 @@ class _SearchPageState extends State<SearchPage> with IEvent {
                   maxWidth: 600,
                   child: ListView.builder(
                     itemCount: _resultList.length,
-                    itemBuilder: (ctx,index) => buildQueryResultItem(ctx,index)
+                    itemBuilder: (ctx,index) => _buildQueryResultItem(ctx,index)
                   )
                 )
               )
@@ -71,7 +76,7 @@ class _SearchPageState extends State<SearchPage> with IEvent {
     );
   }
 
-  Widget buildQueryResultItem(BuildContext ctx, int index){
+  Widget _buildQueryResultItem(BuildContext ctx, int index){
     var itemData = _resultList[index];
     return Padding(
       padding: EdgeInsetsGeometry.all(8),
@@ -89,12 +94,8 @@ class _SearchPageState extends State<SearchPage> with IEvent {
             };
             await Navigator.of(ctx).pushNamed(ROUTER_MUSIC_DETAIL, arguments: params);
             Log.i(Tag, "back search from detail page.");
-            
+
             _edTextFocus.unfocus();
-            // Log.i(Tag, "context.mounted ${context.mounted}");
-            // if(context.mounted){
-            //   FocusScope.of(context).unfocus();
-            // }
           },
           child: Padding(
             padding: EdgeInsets.all(16),
@@ -169,7 +170,6 @@ class _SearchPageState extends State<SearchPage> with IEvent {
       _isLoading = false;
     });
   }
-
 
   Widget buildSearchBarWidget(){
     return Padding(
