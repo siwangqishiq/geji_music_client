@@ -80,51 +80,59 @@ class _SearchPageState extends State<SearchPage> with IEvent {
     var itemData = _resultList[index];
     return Padding(
       padding: EdgeInsetsGeometry.all(8),
-      child: Card(
-        elevation: 12, // 阴影强度
-        shadowColor: Colors.black.withValues(alpha: 0.3),
+      child: Material(
+        color: ComColors.MainBackground,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        child: InkWell(
-          onTap: () async {
-            Log.i(Tag, "click item ${itemData.mid} ${itemData.name} ${itemData.author}");
-            var params = <String,dynamic>{
-              "mid":itemData.mid
-            };
-            await Navigator.of(ctx).pushNamed(ROUTER_MUSIC_DETAIL, arguments: params);
-            Log.i(Tag, "back search from detail page.");
-
-            _edTextFocus.unfocus();
-          },
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                        child: Text(
-                          itemData.name??"*" , 
-                          style: TextStyle(color: Colors.black,fontSize: 20, fontWeight: FontWeight.bold)
-                      ) 
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      itemData.author??"未知歌手",
-                      style: TextStyle(color: Colors.grey,fontSize: 14, fontStyle: FontStyle.normal)
-                    )
-                  ],
-                ),
-              ],
-            ),
+        clipBehavior: Clip.antiAlias, // 关键：裁剪墨水效果
+        child: Card(
+          // elevation: 12, // 阴影强度
+          // shadowColor: Colors.black.withValues(alpha: 0.3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-        )
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () async {
+              Log.i(Tag, "click item ${itemData.mid} ${itemData.name} ${itemData.author}");
+              var params = <String,dynamic>{
+                "mid":itemData.mid
+              };
+              await Navigator.of(ctx).pushNamed(ROUTER_MUSIC_DETAIL, arguments: params);
+              Log.i(Tag, "back search from detail page.");
+
+              _edTextFocus.unfocus();
+            },
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Text(
+                            itemData.name??"*" , 
+                            style: TextStyle(color: Colors.black,fontSize: 20, fontWeight: FontWeight.bold)
+                        ) 
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        itemData.author??"未知歌手",
+                        style: TextStyle(color: Colors.grey,fontSize: 14, fontStyle: FontStyle.normal)
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
+        ),
       )
     );
   }
