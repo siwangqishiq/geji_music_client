@@ -27,16 +27,20 @@ class _SearchPageState extends State<SearchPage> with IEvent {
   bool _searchButtonEnable = false;
 
   final List<SongQuery> _resultList = [];
+  final FocusNode _edTextFocus = FocusNode();
 
   @override
   void initState() {
     super.initState();
     EventBus.instance().register(this);
+    Log.i(Tag, "Search Page init");
   }
 
   @override
   void dispose(){
+    _edTextFocus.dispose();
     EventBus.instance().unRegister(this);
+    Log.i(Tag, "Search Page dispose");
     super.dispose();
   }
 
@@ -78,12 +82,19 @@ class _SearchPageState extends State<SearchPage> with IEvent {
           borderRadius: BorderRadius.circular(16),
         ),
         child: InkWell(
-          onTap: () {
+          onTap: () async {
             Log.i(Tag, "click item ${itemData.mid} ${itemData.name} ${itemData.author}");
             var params = <String,dynamic>{
               "mid":itemData.mid
             };
-            Navigator.of(ctx).pushNamed(ROUTER_MUSIC_DETAIL, arguments: params);
+            await Navigator.of(ctx).pushNamed(ROUTER_MUSIC_DETAIL, arguments: params);
+            Log.i(Tag, "back search from detail page.");
+            
+            _edTextFocus.unfocus();
+            // Log.i(Tag, "context.mounted ${context.mounted}");
+            // if(context.mounted){
+            //   FocusScope.of(context).unfocus();
+            // }
           },
           child: Padding(
             padding: EdgeInsets.all(16),
@@ -123,7 +134,10 @@ class _SearchPageState extends State<SearchPage> with IEvent {
     var queryContent = _inputController.text;
     Log.i(Tag, "query : $queryContent");
 
-    FocusScope.of(context).unfocus();
+    // FocusScope.of(context).unfocus();
+    if(_edTextFocus.hasFocus){
+      _edTextFocus.unfocus();
+    }
 
     setState(() {
       _isLoading = true;
@@ -186,6 +200,7 @@ class _SearchPageState extends State<SearchPage> with IEvent {
                     _searchButtonClick();
                   }
                 },
+                focusNode: _edTextFocus,
                 onChanged: (value) {
                   setState(() {
                     _searchButtonEnable = TextUtil.isNotEmpty(value);
