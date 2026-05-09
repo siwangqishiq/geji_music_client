@@ -19,9 +19,13 @@ class Player {
   final List<Music> _musicList = [];
   int _currentIndex = -1;
 
+  Music? _currentPlayMusic;
+  bool _hasRegisterListener = false;
+
   void playMusic(Music music){
     String musicUrl = music.playUrl??"";
     Log.i("player", "musicUrl $musicUrl");
+    _currentPlayMusic = music;
 
     playUrl(musicUrl);
     FloatWinPlayerState.instance.isPlaying = true;
@@ -51,6 +55,10 @@ class Player {
   }
 
   void _addPlayListener(){
+    if(_hasRegisterListener){
+      return;
+    }
+
     _audioPlayer.onPlayerStateChanged.listen((playState){
       Log.i("player", "music player state change $playState");
       if(playState == PlayerState.playing){
@@ -62,14 +70,19 @@ class Player {
         // FloatWinPlayerState.instance.isPlaying = false;
       }
     });
-    
-
+    _hasRegisterListener = true;
   }
 
   void switchToNextMusic(){
     Log.i("player", "switch to next music");
     if(_musicList.isEmpty) {
       Log.i("player", "music list is empty");
+
+      if(_currentPlayMusic != null){
+        Log.i("player", "music list is empty will loop play current music");
+        playMusic(_currentPlayMusic!);
+      }
+
       return;
     }
 
@@ -94,5 +107,6 @@ class Player {
 
   void dispose() {
     _audioPlayer.dispose();
+    _hasRegisterListener = false;
   }
 }
