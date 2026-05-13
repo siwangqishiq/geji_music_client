@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:geji_music_client/common/account.dart';
 import 'package:geji_music_client/common/com_color.dart';
 import 'package:geji_music_client/common/eventbus/bus_msg.dart';
 import 'package:geji_music_client/common/eventbus/event_bus.dart';
@@ -34,6 +35,8 @@ class _SearchPageState extends State<SearchPage> with IEvent {
     super.initState();
     EventBus.instance().register(this);
     Log.i(Tag, "Search Page init");
+
+    Log.i(Tag, "account is logined ${Account.instance().isLogined()}");
   }
 
   @override

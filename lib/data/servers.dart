@@ -2,8 +2,8 @@
 
 import 'package:geji_music_client/config.dart';
 
-const String BASE_URL_TEST = "http://192.168.100.231:4488";
-// const String BASE_URL_TEST = "http://192.168.31.177:4488";
+// const String BASE_URL_TEST = "http://192.168.100.231:4488";
+const String BASE_URL_TEST = "http://192.168.31.132:4488";
 
 const String BASE_URL = "http://124.220.0.185:4488";
 
@@ -12,5 +12,16 @@ String GetBaseUrl(){
     return BASE_URL_TEST;
   }
   return BASE_URL;
+}
+
+String? JoinHttpUrl(String? origin){
+  if(origin == null){
+    return null;
+  }
+
+  if(origin.startsWith("http://") || origin.startsWith("https://")){
+    return origin;
+  }
+  return "${GetBaseUrl()}/$origin";
 }
 
