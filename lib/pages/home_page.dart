@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geji_music_client/config.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

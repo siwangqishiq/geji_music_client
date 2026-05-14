@@ -1,8 +1,11 @@
 
 
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:geji_music_client/data/pkg.dart';
 import 'package:geji_music_client/data/servers.dart';
+import 'package:geji_music_client/model/upload.dart';
 
 typedef JsonParser<T> = T Function(dynamic json);
 
@@ -77,6 +80,41 @@ class HttpClient {
 
     return _parseResponse<T>(response.statusCode??-1,response.data, parser);
   }
+
+  UploadResp parseUploadFun(dynamic json) => UploadResp.fromJson(json);
+
+  Future<Resp<UploadResp?>> uploadFile(String path,{
+    String? filePath,
+    String? fileName,
+    Uint8List? fileBytes,
+    dynamic data,
+    Options? options}) async{
+      FormData formData;
+      if(fileBytes != null){
+        formData = FormData.fromMap({
+          "file":MultipartFile.fromBytes(
+            fileBytes,
+            filename: fileName, // 指定文件名
+          ),
+        });
+      }else if(filePath != null){
+        formData = FormData.fromMap({
+          "file": await MultipartFile.fromFile(
+            filePath,
+            filename: fileName, // 指定文件名
+          ),
+        });
+      } else{
+        return Future.value(Resp());
+      }
+
+      final response = await _dio.post(path,
+        data: formData,
+        options: options,
+      );
+    return _parseResponse<UploadResp?>(response.statusCode??-1,response.data, parseUploadFun);
+  }
+
 
 
   Future<Resp<T>> get<T>(String path, {

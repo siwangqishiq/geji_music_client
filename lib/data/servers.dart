@@ -22,6 +22,9 @@ String? JoinHttpUrl(String? origin){
   if(origin.startsWith("http://") || origin.startsWith("https://")){
     return origin;
   }
+  if(origin.startsWith("/")){
+    return "${GetBaseUrl()}$origin";
+  }
   return "${GetBaseUrl()}/$origin";
 }
 
