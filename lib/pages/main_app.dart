@@ -21,8 +21,10 @@ class MainApp extends StatelessWidget {
         title: AppName,
         scrollBehavior: AllScrollBehavior(),
         navigatorKey: navigatorKey,
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          fontFamily: "cn"
         ),
         routes: RounterMap(),
         initialRoute: ROUTER_SEARCH,

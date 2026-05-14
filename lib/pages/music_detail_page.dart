@@ -5,6 +5,7 @@ import 'package:geji_music_client/common/com_color.dart';
 import 'package:geji_music_client/common/http_client.dart';
 import 'package:geji_music_client/common/player.dart';
 import 'package:geji_music_client/model/music.dart';
+import 'package:geji_music_client/pages/toobar_action_widget.dart';
 import 'package:geji_music_client/util/log.dart';
 import 'package:geji_music_client/util/time_util.dart';
 import 'package:geji_music_client/util/toast_util.dart';
@@ -75,6 +76,9 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
         elevation: 8,
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
+        actions: [
+          BuildToolbarActionWidget(context),
+        ],
       ),
       body: SafeArea(
         child: (_isLoading || _musicData == null)

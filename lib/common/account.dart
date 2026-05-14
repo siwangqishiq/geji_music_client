@@ -42,4 +42,17 @@ class Account{
   bool isLogined() {
     return TextUtil.isNotEmpty(_token) && ((_user?.uid??-1) > 0);
   }
-}
+
+  String accountDisplayName(){
+    if(_user == null){
+      return "";
+    }
+
+    if(TextUtil.isNotEmpty(_user?.nickname)){
+      return _user?.nickname??"";
+    }
+
+    return "${_user?.uid}";
+  }
+  
+}//end class

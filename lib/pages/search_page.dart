@@ -9,6 +9,7 @@ import 'package:geji_music_client/common/http_client.dart';
 import 'package:geji_music_client/common/widget/responsive_container.dart';
 import 'package:geji_music_client/model/song.dart';
 import 'package:geji_music_client/pages/routers.dart';
+import 'package:geji_music_client/pages/toobar_action_widget.dart';
 import 'package:geji_music_client/util/log.dart';
 import 'package:geji_music_client/util/text_util.dart';
 import 'package:geji_music_client/util/toast_util.dart';
@@ -55,6 +56,9 @@ class _SearchPageState extends State<SearchPage> with IEvent {
         elevation: 8,
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
+        actions: [
+          BuildToolbarActionWidget(context),
+        ],
       ),
       body: SafeArea(
         child: Padding(
