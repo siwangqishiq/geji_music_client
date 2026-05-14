@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geji_music_client/common/http_client.dart';
+import 'package:geji_music_client/common/widget/responsive_container.dart';
 import 'package:geji_music_client/data/pkg.dart';
 import 'package:geji_music_client/data/servers.dart';
 import 'package:geji_music_client/model/upload.dart';
@@ -53,182 +54,186 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
 
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              /// 顶部Logo区域
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 30),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
-                  color: Color(0xFF5B86E5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF5B86E5).withValues(alpha:0.25),
-                      blurRadius: 20,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    /// 头像
-                    GestureDetector(
-                      onTap: () => _pickImage(),
-                      child: Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          Container(
-                            width: 110,
-                            height: 110,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white.withValues(alpha:0.15),
-                              border: Border.all(
+      body: ResponsiveContainer(
+        maxWidth: 500,
+        child: Align(
+          alignment: AlignmentGeometry.topCenter,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Column(
+              children: [
+                /// 顶部Logo区域
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 30),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(28),
+                    color: Color(0xFF5B86E5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF5B86E5).withValues(alpha:0.25),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      /// 头像
+                      GestureDetector(
+                        onTap: () => _pickImage(),
+                        child: Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            Container(
+                              width: 110,
+                              height: 110,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white.withValues(alpha:0.15),
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 3,
+                                ),
+                              ),
+                              child: _buildAvatarWidget(),
+                            ),
+
+                            Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
                                 color: Colors.white,
-                                width: 3,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha:0.1),
+                                    blurRadius: 6,
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(
+                                Icons.camera_alt_rounded,
+                                size: 18,
+                                color: Color(0xFF5B86E5),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      const Text(
+                        "创建你的新账号",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "可点击设置自定义头像",
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha:0.85),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 28),
+
+                /// 表单区域
+                _buildInput(
+                  controller: _accountController,
+                  title: "账户",
+                  hint: "请输入20位以内英文或数字",
+                  icon: Icons.alternate_email_rounded,
+                ),
+
+                const SizedBox(height: 18),
+
+                _buildInput(
+                  controller: _nicknameController,
+                  title: "用户昵称",
+                  hint: "请输入昵称",
+                  icon: Icons.badge_rounded,
+                ),
+
+                const SizedBox(height: 18),
+
+                _buildInput(
+                  controller: _pwdController,
+                  title: "密码",
+                  hint: "请输入密码",
+                  icon: Icons.lock_outline_rounded,
+                  obscureText: true,
+                ),
+
+                const SizedBox(height: 18),
+
+                _buildInput(
+                  controller: _confirmPwdController,
+                  title: "确认密码",
+                  hint: "请再次输入密码",
+                  icon: Icons.lock_reset_rounded,
+                  obscureText: true,
+                ),
+
+                const SizedBox(height: 34),
+
+                /// 注册按钮
+                Container(
+                  width: double.infinity,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18),
+                    color:Color(0xFF5B86E5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF5B86E5).withValues(alpha: 0.35),
+                        blurRadius: 16,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(18),
+                      onTap: () => _clickSubmitButton(),
+                      child: const Center(
+                        child: Row(
+                          mainAxisAlignment:
+                              MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.app_registration_rounded,
+                              color: Colors.white,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              "立即注册",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1,
                               ),
                             ),
-                            child: _buildAvatarWidget(),
-                          ),
-
-                          Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha:0.1),
-                                  blurRadius: 6,
-                                ),
-                              ],
-                            ),
-                            child: const Icon(
-                              Icons.camera_alt_rounded,
-                              size: 18,
-                              color: Color(0xFF5B86E5),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    const Text(
-                      "创建你的新账号",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "可点击设置自定义头像",
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha:0.85),
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 28),
-
-              /// 表单区域
-              _buildInput(
-                controller: _accountController,
-                title: "账户",
-                hint: "请输入20位以内英文或数字",
-                icon: Icons.alternate_email_rounded,
-              ),
-
-              const SizedBox(height: 18),
-
-              _buildInput(
-                controller: _nicknameController,
-                title: "用户昵称",
-                hint: "请输入昵称",
-                icon: Icons.badge_rounded,
-              ),
-
-              const SizedBox(height: 18),
-
-              _buildInput(
-                controller: _pwdController,
-                title: "密码",
-                hint: "请输入密码",
-                icon: Icons.lock_outline_rounded,
-                obscureText: true,
-              ),
-
-              const SizedBox(height: 18),
-
-              _buildInput(
-                controller: _confirmPwdController,
-                title: "确认密码",
-                hint: "请再次输入密码",
-                icon: Icons.lock_reset_rounded,
-                obscureText: true,
-              ),
-
-              const SizedBox(height: 34),
-
-              /// 注册按钮
-              Container(
-                width: double.infinity,
-                height: 56,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  color:Color(0xFF5B86E5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF5B86E5).withValues(alpha: 0.35),
-                      blurRadius: 16,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(18),
-                    onTap: () {},
-                    child: const Center(
-                      child: Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.app_registration_rounded,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            "立即注册",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
+        )
+      )
     );
   }
 
@@ -272,6 +277,76 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() {
       _avatar = url;
     });
+  }
+
+  void _clickSubmitButton(){
+    Log.i("register", "click submit button");
+
+    if(!_checkRegisterAccountInput()){
+      Log.e("register", "input invalided");
+      return;
+    }
+
+    var account = _accountController.text;
+    var nickname = _nicknameController.text;
+    var pwd = _pwdController.text;
+
+    Log.i("register", "input acount $account $nickname $pwd");
+    
+  }
+
+  bool _checkRegisterAccountInput() {
+    var account = _accountController.text;
+    var nickname = _nicknameController.text;
+    var pwd = _pwdController.text;
+    var rePwd = _confirmPwdController.text;
+
+    if (account.isEmpty){
+      ToastUtil.showAsError("账号不能为空", algin: Alignment.topCenter);
+      return false;
+    }
+
+    if (account.length > 32){
+      ToastUtil.showAsError("账号过长，不能超过32个字符",algin: Alignment.topCenter);
+      return false;
+    }
+
+    if(!TextUtil.isValidString(account)){
+      ToastUtil.showAsError("账号中包含了非法字符",algin: Alignment.topCenter);
+      return false;
+    }
+
+    if (nickname.isEmpty){
+      ToastUtil.showAsError("昵称不能为空",algin: Alignment.topCenter);
+      return false;
+    }
+
+    if (nickname.length > 64){
+      ToastUtil.showAsError("昵称过长，不能超过64个字符",algin: Alignment.topCenter);
+      return false;
+    }
+
+    if(pwd.isEmpty){
+      ToastUtil.showAsError("未输入密码",algin: Alignment.topCenter);
+      return false;
+    }
+
+    if(pwd.length > 32){
+      ToastUtil.showAsError("密码不能超过32个字符",algin: Alignment.topCenter);
+      return false;
+    }
+
+    if(!TextUtil.isValidString(pwd)){
+      ToastUtil.showAsError("密码中包含了非法字符",algin: Alignment.topCenter);
+      return false;
+    }
+
+    if(pwd != rePwd){
+      ToastUtil.showAsError("两次密码输入不一致",algin: Alignment.topCenter);
+      return false;
+    }
+
+    return true;
   }
 
   Widget _buildAvatarWidget(){
