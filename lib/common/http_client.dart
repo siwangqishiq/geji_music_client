@@ -69,12 +69,14 @@ class HttpClient {
   Future<Resp<T>> post<T>(String path, {
     dynamic data,
     Map<String, dynamic>? params,
+    Map<String, dynamic>? queryParameters,
     Options? options, 
     JsonParser<T>? parser}) async{
     
+    // print("params :${params} ${params?.length}");
     final response = await _dio.post(path,
-      data: data,
-      queryParameters: params,
+      data: params,
+      queryParameters: queryParameters,
       options: options,
     );
 

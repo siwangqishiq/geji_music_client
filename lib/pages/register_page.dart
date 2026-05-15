@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geji_music_client/common/http_client.dart';
+import 'package:geji_music_client/common/widget/button.dart';
 import 'package:geji_music_client/common/widget/responsive_container.dart';
 import 'package:geji_music_client/data/pkg.dart';
 import 'package:geji_music_client/data/servers.dart';
@@ -11,6 +12,7 @@ import 'package:geji_music_client/util/log.dart';
 import 'package:geji_music_client/util/text_util.dart';
 import 'package:geji_music_client/util/toast_util.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:toastification/toastification.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -35,6 +37,8 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
   
   String? _avatar;
+
+  bool _isRequesting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -199,35 +203,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ],
                   ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(18),
-                      onTap: () => _clickSubmitButton(),
-                      child: const Center(
-                        child: Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.app_registration_rounded,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              "立即注册",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  child: CommonButton(
+                    text: "立即注册",
+                    loading: _isRequesting,
+                    onPressed: () => _clickSubmitButton()
+                  )
                 ),
               ],
             ),
@@ -287,12 +267,55 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
+    _submitRegisterRequest();
+  }
+
+  void _submitRegisterRequest() async {
+    setState(() {
+      _isRequesting = true;
+    });
+
     var account = _accountController.text;
     var nickname = _nicknameController.text;
     var pwd = _pwdController.text;
 
-    Log.i("register", "input acount $account $nickname $pwd");
-    
+    Log.i("register", "input acount $account $nickname $pwd $_avatar");
+
+    try{
+      Map<String ,dynamic> params = <String,dynamic>{
+        "account":account,
+        "nickname":nickname,
+        "password":pwd,
+      };
+
+      if(TextUtil.isNotEmpty(_avatar)){
+        params["avatar"] = _avatar;
+      }
+
+      var resp = await HttpClient().post<String?>("/register",
+        params: params,
+      );
+
+      Log.i("register", "resp ${resp.code}");
+      if(resp.isSuccess()){
+        var list = resp.data;
+        Log.w("register", "Get query result : ${list?.length??0}");
+        ToastUtil.show("注册成功.",style: ToastificationStyle.fillColored);
+        if(context.mounted){
+          Navigator.of(context).pop();
+        }
+      }else{
+        ToastUtil.showAsError(resp.msg??"注册错误");
+      }
+    }catch(e, stackTrace) {
+      Log.e("register", "Error request $e");
+      Log.e("register", "Error stackTrace $stackTrace");
+      ToastUtil.showAsError("注册错误");
+    }
+
+    setState(() {
+      _isRequesting = false;
+    });
   }
 
   bool _checkRegisterAccountInput() {

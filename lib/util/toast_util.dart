@@ -4,12 +4,13 @@ import 'package:toastification/toastification.dart';
 class ToastUtil {
   static void show(String content,{
     AlignmentGeometry? algin = Alignment.bottomCenter,
-    Duration? autoCloseDuration = const Duration(seconds: 3)}) {
+    Duration? autoCloseDuration = const Duration(seconds: 3),
+    ToastificationStyle style = ToastificationStyle.simple}) {
     toastification.show(
       title: Text(content),
       autoCloseDuration:autoCloseDuration,
       alignment:algin,
-      style: ToastificationStyle.simple
+      style: style
     );
   }
 
