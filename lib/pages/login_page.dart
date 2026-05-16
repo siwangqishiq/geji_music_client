@@ -1,10 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:geji_music_client/common/com_color.dart';
+import 'package:geji_music_client/common/http_client.dart';
+import 'package:geji_music_client/common/login_manager.dart';
 import 'package:geji_music_client/common/widget/button.dart';
 import 'package:geji_music_client/common/widget/common_text_field.dart';
 import 'package:geji_music_client/common/widget/responsive_container.dart';
+import 'package:geji_music_client/model/login.dart';
+import 'package:geji_music_client/model/user.dart';
 import 'package:geji_music_client/pages/routers.dart';
 import 'package:geji_music_client/util/log.dart';
+import 'package:geji_music_client/util/text_util.dart';
+import 'package:geji_music_client/util/toast_util.dart';
+import 'package:toastification/toastification.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,6 +26,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _accountController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
 
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +37,17 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         title: Text("登录"),
+        actions: [
+          InkWell(
+            onTap: (){
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                ROUTER_SEARCH,
+                (route) => false,
+              );
+            },
+            child: Text("去听歌"),
+          ),
+        ]
       ),
       backgroundColor: ComColors.MainBackground,
       body: ResponsiveContainer(
@@ -59,8 +81,8 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 16),
                 CommonButton(
                   text: "登录",
-                  onPressed: () {
-                  },
+                  loading: _isLoading,
+                  onPressed: () => _loginButtonClick()
                 ),
                 const SizedBox(height: 24),
                 InkWell(
@@ -77,4 +99,67 @@ class _LoginPageState extends State<LoginPage> {
       ) 
     );
   }
-}
+
+  void _loginButtonClick(){
+    var account = _accountController.text;
+    var password = _pwdController.text;
+
+    Log.i("login", "login $account - $password");
+
+    if(TextUtil.isEmpty(account) || TextUtil.isEmpty(password)) {
+      ToastUtil.showAsError("用户或密码未填写");
+      return;
+    }
+
+    _doLogin(account, password);
+  }
+
+  void _doLogin(String account, String password) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try{
+      Map<String ,dynamic> params = <String,dynamic>{
+        "account":account,
+        "password":password,
+      };
+
+      var resp = await HttpClient().post<LoginResp?>("/login",
+        params: params,
+        parser: (jsonMap) => LoginResp.fromMap(jsonMap),
+      );
+
+      Log.i("login", "resp ${resp.code}");
+      if(resp.isSuccess()){
+        var loginResp = resp.data;
+        if(loginResp != null){
+          Log.w("register", "Get login token : ${loginResp.token}");
+          var userInfo = User.fromJson(json.encode(loginResp.encode()));
+          Log.w("register", "Get login userinfo : ${json.encode(loginResp.encode())}");
+          await LoginManager.instance().saveLoginData(loginResp.token, userInfo);
+          ToastUtil.show("登录成功",style: ToastificationStyle.fillColored);
+
+          if(!mounted){
+            return;
+          }
+
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            ROUTER_HOME,
+            (route) => false,
+          );
+        }
+      }else{
+        ToastUtil.showAsError(resp.msg??"登录错误");
+      }
+    }catch(e, stackTrace) {
+      Log.e("register", "Error request $e");
+      Log.e("register", "Error stackTrace $stackTrace");
+      ToastUtil.showAsError("登录异常");
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+}//end class

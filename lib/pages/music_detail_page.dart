@@ -2,8 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:geji_music_client/common/com_color.dart';
+import 'package:geji_music_client/common/eventbus/bus_msg.dart';
+import 'package:geji_music_client/common/eventbus/event_bus.dart';
 import 'package:geji_music_client/common/http_client.dart';
 import 'package:geji_music_client/common/player.dart';
+import 'package:geji_music_client/data/message_types.dart';
 import 'package:geji_music_client/model/music.dart';
 import 'package:geji_music_client/pages/toobar_action_widget.dart';
 import 'package:geji_music_client/util/log.dart';
@@ -19,7 +22,7 @@ class MusicDetailPage extends StatefulWidget {
   State<StatefulWidget> createState() => _MusicDetailPageState();
 } //end class
 
-class _MusicDetailPageState extends State<MusicDetailPage> {
+class _MusicDetailPageState extends State<MusicDetailPage> with IEvent {
   static String Tag = "MusicDetailPage";
 
   bool _isLoading = true;
@@ -28,7 +31,14 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
   @override
   void initState() {
     super.initState();
+    EventBus.instance().register(this);
     _requestMusicDetail();
+  }
+
+  @override
+  void dispose(){
+    EventBus.instance().unRegister(this);
+    super.dispose();
   }
 
   void _requestMusicDetail() async {
@@ -226,5 +236,18 @@ class _MusicDetailPageState extends State<MusicDetailPage> {
         ),
       ),
     );
+  }
+
+  @override
+  bool onEvent(EventMessage msg) {
+    switch(msg.what){
+      case MessageTypes.PAGE_SETSTATE:
+       setState(() {});
+        break;
+      case MessageTypes.LOGIN_SUCCESS:
+       setState(() {});
+        break;
+    }
+    return false;
   }
 }

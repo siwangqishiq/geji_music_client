@@ -7,6 +7,7 @@ import 'package:geji_music_client/common/eventbus/bus_msg.dart';
 import 'package:geji_music_client/common/eventbus/event_bus.dart';
 import 'package:geji_music_client/common/http_client.dart';
 import 'package:geji_music_client/common/widget/responsive_container.dart';
+import 'package:geji_music_client/data/message_types.dart';
 import 'package:geji_music_client/model/song.dart';
 import 'package:geji_music_client/pages/routers.dart';
 import 'package:geji_music_client/pages/toobar_action_widget.dart';
@@ -263,6 +264,14 @@ class _SearchPageState extends State<SearchPage> with IEvent {
   
   @override
   bool onEvent(EventMessage msg) {
+    switch(msg.what){
+      case MessageTypes.PAGE_SETSTATE:
+       setState(() {});
+        break;
+      case MessageTypes.LOGIN_SUCCESS:
+       setState(() {});
+        break;
+    }
     return false;
   }
 }//end class

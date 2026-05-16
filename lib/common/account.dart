@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:geji_music_client/data/keys.dart';
 import 'package:geji_music_client/model/user.dart';
 import 'package:geji_music_client/util/log.dart';
@@ -16,14 +18,43 @@ class Account{
   }
 
   String? _token;
-  String? getToken(){
-    return _token;
-  }
+  String? getToken() => _token;
 
   User? _user;
+  User? getUserInfo() => _user;
 
   void _init(){
     Log.i("account", "init account");
+  }
+
+  Future<bool> saveToken(String? token) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(TextUtil.isEmpty(token)){
+      var result = await prefs.remove(Keys.TOKEN);
+      _token = null;
+      return result;
+    }
+
+    var result = await prefs.setString(Keys.TOKEN, token!);
+    Log.i("account", "save token:$token result $result");
+    _token = token;
+    return result;
+  }
+
+  Future<bool> saveUser(User? user) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if(user == null){
+      var result = await prefs.remove(Keys.USER_INFO);
+      _user = null;
+      return result;
+    }
+
+    var userEncodeStr = jsonEncode(user.encode());
+    var result = await prefs.setString(Keys.USER_INFO, userEncodeStr);
+    Log.i("account", "save user:$userEncodeStr result $result");
+    _user = user;
+    return result;
   }
 
   Future<void> load() async{

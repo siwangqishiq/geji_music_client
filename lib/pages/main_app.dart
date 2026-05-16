@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:geji_music_client/common/account.dart';
 import 'package:geji_music_client/common/floatwin/floating_manager.dart';
 import 'package:geji_music_client/config.dart';
 import 'package:geji_music_client/pages/routers.dart';
@@ -16,6 +17,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FloatingManager.navigatorKey = navigatorKey;
+    final bool isLogined = Account.instance().isLogined();
     return ToastificationWrapper(
       child:MaterialApp(
         title: AppName,
@@ -27,7 +29,7 @@ class MainApp extends StatelessWidget {
           fontFamily: "cn"
         ),
         routes: RounterMap(),
-        initialRoute: ROUTER_SEARCH,
+        initialRoute: isLogined?ROUTER_HOME:ROUTER_SEARCH,
       ) 
     );
   }

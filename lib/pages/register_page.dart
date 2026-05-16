@@ -298,9 +298,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
       Log.i("register", "resp ${resp.code}");
       if(resp.isSuccess()){
-        var list = resp.data;
-        Log.w("register", "Get query result : ${list?.length??0}");
         ToastUtil.show("注册成功.",style: ToastificationStyle.fillColored);
+        
         if(context.mounted){
           Navigator.of(context).pop();
         }
