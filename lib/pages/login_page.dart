@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
           var userInfo = User.fromJson(json.encode(loginResp.encode()));
           Log.w("register", "Get login userinfo : ${json.encode(loginResp.encode())}");
           await LoginManager.instance().saveLoginData(loginResp.token, userInfo);
-          ToastUtil.show("登录成功",style: ToastificationStyle.fillColored);
+          ToastUtil.show("登录成功",style: ToastificationStyle.fillColored,algin: Alignment.center);
 
           if(!mounted){
             return;

@@ -1,80 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:geji_music_client/common/account.dart';
+import 'package:geji_music_client/common/widget/avatar.dart';
+import 'package:geji_music_client/model/user.dart';
+import 'package:geji_music_client/util/log.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+  
+  @override
+  State<StatefulWidget> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _user = Account.instance().getUserInfo();
+    Log.i("profile", "avatar :${_user?.avatar}");
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.blue.shade400,
-                    Colors.lightBlueAccent,
-                  ],
-                ),
-              ),
-              child: const Icon(
-                Icons.person,
-                size: 50,
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              "Blue Music User",
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "热爱音乐 · 热爱生活",
-              style: TextStyle(
-                color: Colors.white60,
-              ),
-            ),
-            const SizedBox(height: 40),
-            profileItem(Icons.favorite_border, "我喜欢的音乐"),
-          ],
-        ),
-      ),
-    );
-  }
-
-  static Widget profileItem(IconData icon, String title) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: const Color(0xFF172554),
-        borderRadius: BorderRadius.circular(22),
-      ),
-      child: Row(
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(icon, color: Colors.lightBlueAccent),
-          const SizedBox(width: 16),
+          SizedBox(height: 80),
+          AvatarWidget(_user?.avatar,size: 120),
           Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            child: Container(color: Colors.transparent)
           ),
-          const Icon(Icons.chevron_right),
+
+          SizedBox(height: 20)
         ],
       ),
     );
   }
-}
+}//end class

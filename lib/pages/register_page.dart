@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geji_music_client/common/http_client.dart';
+import 'package:geji_music_client/common/widget/avatar.dart';
 import 'package:geji_music_client/common/widget/button.dart';
 import 'package:geji_music_client/common/widget/responsive_container.dart';
 import 'package:geji_music_client/data/pkg.dart';
@@ -100,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   width: 3,
                                 ),
                               ),
-                              child: _buildAvatarWidget(),
+                              child: AvatarWidget(_avatar),
                             ),
 
                             Container(
@@ -369,25 +370,6 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     return true;
-  }
-
-  Widget _buildAvatarWidget(){
-    if(TextUtil.isEmpty(_avatar)){
-      return const Icon(
-        Icons.person_rounded,
-        size: 60,
-        color: Colors.white,
-      );
-    }
-
-    return ClipOval(
-      child: Image.network(
-        JoinHttpUrl(_avatar)??"",
-        width: 60,
-        height: 60,
-        fit: BoxFit.cover,
-      )
-    );
   }
 
   Widget _buildInput({
