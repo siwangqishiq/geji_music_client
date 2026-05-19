@@ -45,7 +45,10 @@ class _LoginPageState extends State<LoginPage> {
                 (route) => false,
               );
             },
-            child: Text("去听歌"),
+            child: Padding(
+              padding: EdgeInsetsGeometry.only(right: 16),
+              child: Text("去听歌"),
+            ),
           ),
         ]
       ),
