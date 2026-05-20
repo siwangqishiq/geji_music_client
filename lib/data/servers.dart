@@ -2,8 +2,8 @@
 
 import 'package:geji_music_client/config.dart';
 
-// const String BASE_URL_TEST = "http://192.168.100.41:4488";
-const String BASE_URL_TEST = "http://192.168.31.131:4488";
+const String BASE_URL_TEST = "http://192.168.100.177:4488";
+// const String BASE_URL_TEST = "http://192.168.31.131:4488";
 
 const String BASE_URL = "http://124.220.0.185:4488";
 
