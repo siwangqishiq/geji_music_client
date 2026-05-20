@@ -9,7 +9,7 @@ class AvatarWidget extends StatelessWidget{
   double size;
   Color color;
 
-  AvatarWidget(this.avatar,{this.size = 60,this.color = Colors.white, super.key});
+  AvatarWidget(this.avatar,{this.size = 60,this.color = Colors.blueGrey, super.key});
   
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class AvatarWidget extends StatelessWidget{
         height: size + 4,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(size + 4),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withValues(alpha: 0.5),

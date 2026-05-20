@@ -26,29 +26,39 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(height: 80),
-          AvatarWidget(_user?.avatar,size: 120,color: Colors.grey),
-          SizedBox(height:16),
-          Text(Account.instance().accountDisplayName(),style: TextStyle(fontSize: 32,color: Colors.black)),
-          Expanded(
-            child: Container(color: Colors.transparent)
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 8,
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
+          title: Text("我的"),
+        ),
+        body: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 80),
+              AvatarWidget(_user?.avatar,size: 120,color: Colors.grey),
+              SizedBox(height:16),
+              Text(Account.instance().accountDisplayName(),style: TextStyle(fontSize: 32,color: Colors.black)),
+              Expanded(
+                child: Container(color: Colors.transparent)
+              ),
+              Padding(
+                padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
+                child: CommonButton(
+                  text: "退出登录",
+                  color: Colors.redAccent,
+                  onPressed: ()=> _loginOutClicked(context),
+                ),
+              ),
+              SizedBox(height: 20)
+            ],
           ),
-          Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
-            child: CommonButton(
-              text: "退出登录",
-              color: Colors.redAccent,
-              onPressed: ()=> _loginOutClicked(context),
-            ),
-          ),
-          SizedBox(height: 20)
-        ],
-      ),
+        )
+      )
     );
   }
 

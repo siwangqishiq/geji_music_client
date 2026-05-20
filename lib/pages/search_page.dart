@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: must_be_immutable, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:geji_music_client/common/account.dart';
@@ -16,7 +16,9 @@ import 'package:geji_music_client/util/text_util.dart';
 import 'package:geji_music_client/util/toast_util.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  bool showToolbar;
+
+  SearchPage({this.showToolbar = true,super.key});
   
   @override
   State<StatefulWidget> createState() => _SearchPageState();
@@ -53,14 +55,14 @@ class _SearchPageState extends State<SearchPage> with IEvent {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:ComColors.MainBackground,
-      appBar:AppBar(
+      appBar:widget.showToolbar?AppBar(
         elevation: 8,
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         actions: [
           BuildToolbarActionWidget(context),
         ],
-      ),
+      ):null,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsetsGeometry.all(16),

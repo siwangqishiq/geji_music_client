@@ -319,10 +319,10 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   bool _checkRegisterAccountInput() {
-    var account = _accountController.text;
-    var nickname = _nicknameController.text;
-    var pwd = _pwdController.text;
-    var rePwd = _confirmPwdController.text;
+    var account = _accountController.text.trim();
+    var nickname = _nicknameController.text.trim();
+    var pwd = _pwdController.text.trim();
+    var rePwd = _confirmPwdController.text.trim();
 
     if (account.isEmpty){
       ToastUtil.showAsError("账号不能为空", algin: Alignment.topCenter);

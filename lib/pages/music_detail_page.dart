@@ -86,9 +86,9 @@ class _MusicDetailPageState extends State<MusicDetailPage> with IEvent {
         elevation: 8,
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
-        actions: [
-          BuildToolbarActionWidget(context),
-        ],
+        // actions: [
+        //   BuildToolbarActionWidget(context),
+        // ],
       ),
       body: SafeArea(
         child: (_isLoading || _musicData == null)

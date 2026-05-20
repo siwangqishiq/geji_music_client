@@ -17,10 +17,10 @@ String ROUTER_REGISTER = "/register";
 
 Map<String, WidgetBuilder> RounterMap(){
   return {
-    ROUTER_HOME:(context) => const HomePage(),
-    ROUTER_SEARCH:(context) => const SearchPage(),
-    ROUTER_LOGIN:(context) => const LoginPage(),
-    ROUTER_REGISTER:(context) => const RegisterPage(),
+    ROUTER_HOME:(context) => HomePage(),
+    ROUTER_SEARCH:(context) => SearchPage(),
+    ROUTER_LOGIN:(context) => LoginPage(),
+    ROUTER_REGISTER:(context) => RegisterPage(),
     
     ROUTER_MUSIC_DETAIL:(context) {
       final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
