@@ -57,6 +57,7 @@ class _SearchPageState extends State<SearchPage> with IEvent {
       backgroundColor:ComColors.MainBackground,
       appBar:widget.showToolbar?AppBar(
         elevation: 8,
+        title: Text("搜索"),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         actions: [

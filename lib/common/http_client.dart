@@ -3,6 +3,7 @@
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:geji_music_client/common/account.dart';
 import 'package:geji_music_client/data/pkg.dart';
 import 'package:geji_music_client/data/servers.dart';
 import 'package:geji_music_client/model/upload.dart';
@@ -37,14 +38,14 @@ class HttpClient {
   void _initInterceptors() {
     _dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) async {
+        onRequest: (options, handler) {
           // 统一加鉴权
-          String? token = await _getToken();
+          String? token = _getToken();
           if (token != null) {
-            options.headers["Authorization"] = "Bearer $token";
+            options.headers["token"] = token;
           }
 
-          // 可以统一加公共参数
+          // 统一加公共参数
           // options.queryParameters["app_version"] = "1.0";
           return handler.next(options);
         },
@@ -183,8 +184,8 @@ class HttpClient {
   //   );
   // }
 
-  Future<String?> _getToken() async {
-    return null;
+  String? _getToken() {
+    return Account.instance().getToken();
   }
 
   Future<void> _handleUnauthorized() async {

@@ -7,17 +7,28 @@ import 'package:geji_music_client/util/log.dart';
 
 Widget BuildToolbarActionWidget(BuildContext context){
   final isLogined = Account.instance().isLogined();
+  if(isLogined){
+    return SizedBox(width: 0);
+  }
   return Row(
     children: [
-      isLogined?_buildLoginedWidget(context):
-        InkWell(
-          child: Text("登录"),
-          onTap: (){
-            Log.i("toolbar", "click login button");
-            var fromOtherPage = true;
-            Navigator.of(context).pushNamed(ROUTER_LOGIN, arguments: fromOtherPage);
-          },
-        ),
+      // isLogined?_buildLoginedWidget(context):
+      //   InkWell(
+      //     child: Text("登录"),
+      //     onTap: (){
+      //       Log.i("toolbar", "click login button");
+      //       var fromOtherPage = true;
+      //       Navigator.of(context).pushNamed(ROUTER_LOGIN, arguments: fromOtherPage);
+      //     },
+      //   ),
+      InkWell(
+        child: Text("登录"),
+        onTap: (){
+          Log.i("toolbar", "click login button");
+          var fromOtherPage = true;
+          Navigator.of(context).pushNamed(ROUTER_LOGIN, arguments: fromOtherPage);
+        },
+      ),
       SizedBox(width: 16)
     ],
   );

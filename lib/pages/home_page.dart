@@ -49,7 +49,7 @@ class HomePageState extends State<HomePage> {
 
   final pages = [
     FavorlistPage(),
-    SearchPage(showToolbar: false),
+    SearchPage(showToolbar: true),
     ProfilePage(),
   ];
 
