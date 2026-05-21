@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geji_music_client/common/account.dart';
+import 'package:geji_music_client/common/http_client.dart';
 import 'package:geji_music_client/common/widget/avatar.dart';
 import 'package:geji_music_client/common/widget/button.dart';
 import 'package:geji_music_client/common/widget/dialog_helper.dart';
@@ -74,8 +75,29 @@ class _ProfilePageState extends State<ProfilePage> {
       });
   }
 
+  Future<void> _sendLogoutRequest() async {
+    try{
+      var resp = await HttpClient().post<String?>("/logout",);
+
+      Log.i("logout", "resp ${resp.code}");
+      if(resp.isSuccess()){
+        var loginOutResp = resp.data;
+        if(loginOutResp != null){
+          Log.i("logout", "Get logout data : $loginOutResp");
+        }
+      }else{
+        Log.e("logout", "Error logout ${resp.msg}");
+      }
+    }catch(e, stackTrace) {
+      Log.e("logout", "Error request $e");
+      Log.e("logout", "Error stackTrace $stackTrace");
+    }
+  }
+
   void _doLoginOut(BuildContext context) async{
     Log.i("profile_page", "clear local login info");
+
+    await _sendLogoutRequest();
 
     Log.i("profile_page", "clear local token");
     await Account.instance().saveToken(null);

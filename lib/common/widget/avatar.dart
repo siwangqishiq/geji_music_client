@@ -43,7 +43,34 @@ class AvatarWidget extends StatelessWidget{
         width: size,
         height: size,
         fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return _buildFallbackCover();
+        },
       )
+    );
+  }
+
+  Widget _buildFallbackCover(){
+    return Container(
+      width: 180,
+      height: 180,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.grey.shade300,
+            Colors.grey.shade100,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Center(
+        child: Icon(
+          Icons.music_note,
+          size: 48,
+          color: Colors.grey.shade500,
+        ),
+      ),
     );
   }
 }
