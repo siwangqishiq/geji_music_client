@@ -100,6 +100,14 @@ class Player {
     }
   }
 
+  void stop() {
+    Log.i("player", "player stop ${_audioPlayer.state}");
+    _audioPlayer.stop();
+    
+    FloatWinPlayerState.instance.isPlaying = false;
+    FloatingManager().hide();
+  }
+
   void resume() {
     Log.i("player", "player resume");
     _audioPlayer.resume();
