@@ -77,6 +77,33 @@ class _MusicDetailPageState extends State<MusicDetailPage> with IEvent {
     Player().playMusic(music);
   }
 
+  Future<void> _addToMyFavor() async {
+    if(_musicData == null) {
+      return;
+    }
+
+    Log.i(Tag, "add music mid ${_musicData?.mid} ${_musicData?.name} to favor");
+    try {
+      var resp = await HttpClient().get<Music?>(
+        "/api/detail",
+        params: {"mid": widget.mid},
+        parser: (json) => Music.fromJson(json),
+      );
+      Log.i(Tag, "resp ${resp.code}");
+      if (resp.isSuccess()) {
+        Log.w(Tag, "Get detail result : ${resp.data?.name}");
+        _musicData = resp.data;
+        _isLoading = false;
+      } else {
+        ToastUtil.showAsError(resp.msg ?? "请求详情错误");
+      }
+    } catch (e, stackTrace) {
+      Log.e(Tag, "Error request $e");
+      Log.e(Tag, "Error stackTrace $stackTrace");
+      ToastUtil.showAsError("请求错误");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -182,8 +209,9 @@ class _MusicDetailPageState extends State<MusicDetailPage> with IEvent {
               SizedBox(width: 8),
               ElevatedButton(
                 onPressed: () {
-                  ToastUtil.showAsError("请先登录");
+                  // ToastUtil.showAsError("请先登录");
                   // FloatingManager().toggle();
+                  _addToMyFavor();
                 },
                 style: ElevatedButton.styleFrom(
                   shape: const StadiumBorder(),
