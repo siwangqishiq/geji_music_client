@@ -7,11 +7,13 @@ import 'package:geji_music_client/common/eventbus/event_bus.dart';
 import 'package:geji_music_client/common/http_client.dart';
 import 'package:geji_music_client/common/player.dart';
 import 'package:geji_music_client/data/message_types.dart';
+import 'package:geji_music_client/model/favor.dart';
 import 'package:geji_music_client/model/music.dart';
 import 'package:geji_music_client/pages/toobar_action_widget.dart';
 import 'package:geji_music_client/util/log.dart';
 import 'package:geji_music_client/util/time_util.dart';
 import 'package:geji_music_client/util/toast_util.dart';
+import 'package:toastification/toastification.dart';
 
 class MusicDetailPage extends StatefulWidget {
   final String mid;
@@ -84,16 +86,20 @@ class _MusicDetailPageState extends State<MusicDetailPage> with IEvent {
 
     Log.i(Tag, "add music mid ${_musicData?.mid} ${_musicData?.name} to favor");
     try {
-      var resp = await HttpClient().get<Music?>(
-        "/api/detail",
+      var resp = await HttpClient().post<Favor?>(
+        "/api/addFavor",
         params: {"mid": widget.mid},
-        parser: (json) => Music.fromJson(json),
+        parser: (json) => Favor.fromJson(json),
       );
       Log.i(Tag, "resp ${resp.code}");
+
       if (resp.isSuccess()) {
-        Log.w(Tag, "Get detail result : ${resp.data?.name}");
-        _musicData = resp.data;
+        Log.i(Tag, "Add Favor result : ${resp.data?.mid}");
+        Favor? favorModel = resp.data;
+        Log.i(Tag, "add music ${favorModel?.music?.name} to my favor");
         _isLoading = false;
+
+        ToastUtil.show("添加歌单成功", style: ToastificationStyle.fillColored);
       } else {
         ToastUtil.showAsError(resp.msg ?? "请求详情错误");
       }

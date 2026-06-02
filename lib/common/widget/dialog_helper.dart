@@ -75,8 +75,11 @@ class DialogHelper{
   ///
   /// 确认 取消 对话框
   /// 
-  static void showAlertDialog(String title, String content, BuildContext context,
-      VoidCallback? sureCallback, VoidCallback? cancelCallback) {
+  static void showAlertDialog(String title, 
+      String content, 
+      BuildContext context,
+      VoidCallback? sureCallback, 
+      VoidCallback? cancelCallback , {String confirmText = "确定", String cancelText = "取消"}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -88,7 +91,7 @@ class DialogHelper{
           actions: <Widget>[
             SizedBox(
               child: TextButton(
-                child: const Text("确定"),
+                child: Text(confirmText),
                 onPressed: () {
                   Navigator.pop(context);
                   if (sureCallback != null) {
@@ -99,7 +102,7 @@ class DialogHelper{
             ),
             SizedBox(
               child: TextButton(
-                child: const Text("取消"),
+                child: Text(cancelText),
                 onPressed: () {
                   Navigator.pop(context);
                   if (cancelCallback != null) {

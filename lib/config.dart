@@ -3,6 +3,6 @@
 
 const String AppName = "歌姬音乐";
 
-const bool IsDebug = true;
+const bool IsDebug = false;
 
 
