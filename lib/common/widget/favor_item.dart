@@ -104,7 +104,7 @@ class FavorItem extends StatelessWidget {
   }
 
   Widget _buildCover(Music? music) {
-    if ((music?.cover ?? "").isEmpty) {
+    if ((music?.cover ?? "").isEmpty || music?.cover?.startsWith("http") == false) {
       return Container(
         width: 64,
         height: 64,

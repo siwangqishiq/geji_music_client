@@ -25,8 +25,8 @@ class MainApp extends StatelessWidget {
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          fontFamily: "cn"
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue)
+          // fontFamily: "cn"
         ),
         routes: RounterMap(),
         initialRoute: isLogined?ROUTER_HOME:ROUTER_SEARCH,

@@ -82,7 +82,8 @@ flutter:
   fonts:
     - family: cn
       fonts:
-        - asset: assets/fonts/yuan.otf
+        # - asset: assets/fonts/yuan.otf
+        # - asset: assets/fonts/song.otf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
