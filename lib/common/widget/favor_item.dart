@@ -104,16 +104,8 @@ class FavorItem extends StatelessWidget {
   }
 
   Widget _buildCover(Music? music) {
-    if ((music?.cover ?? "").isEmpty || music?.cover?.startsWith("http") == false) {
-      return Container(
-        width: 64,
-        height: 64,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: Colors.blue.shade100,
-        ),
-        child: const Icon(Icons.music_note),
-      );
+    if ((music?.cover ?? "").isEmpty) {
+      return _buildFallbackCover();
     }
 
     return ClipRRect(
@@ -123,9 +115,26 @@ class FavorItem extends StatelessWidget {
         width: 64,
         height: 64,
         fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return _buildFallbackCover();
+        },
       ),
     );
   }
+
+  Widget _buildFallbackCover(){
+    return Container(
+      width: 64,
+      height: 64,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        color: Colors.blue.shade100,
+      ),
+      child: const Icon(Icons.music_note),
+    );
+  }
+
+
 
   String formatDuration(int seconds) {
     return TimeUtil.formatDuration(seconds);
